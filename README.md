@@ -1,4 +1,5 @@
-#Jexcel
+Jexcel
+==============
 Jexcel is a ```.xls``` and ```.xlsx``` file parser that allows you to create and parse Excel files in Java.
 
 ### Requirements
@@ -79,7 +80,7 @@ Jexcel requires Java 1.8+ and uses Apache POI
    ```java
    List<String> warnings = result.getWarnings();
    ```
-   ####Warnings
+####Warnings
    Parser accepts ```org.notnaturalselection.jexcel.parsing.WarningPolicy```.
    * ```WarningPolicy.STRONG```. In case of error exception will be thrown.
    * ```WarningPolicy.WEAK```. In case of error parser records a warning that appears in ```ParseResult```.
