@@ -18,9 +18,7 @@ public class Test {
                 ExampleObject::new,
                 Arrays.asList(ExampleHeader.values())
         );
-        ParseResult<ExampleObject> result = parser.parse(new File("path"));
-        //or
-        parser.parse(new FileInputStream("path"));
+        ParseResult<ExampleObject> result = parser.parse(new File("test.xlsx"));
         Map<String, List<ExampleObject>> map = result.getResult();
         List<String> warnings = result.getWarnings();
     }

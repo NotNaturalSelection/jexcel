@@ -56,7 +56,7 @@ public class StandardParser<T, H extends Header> extends AbstractParser<T> {
             Object value = FieldType.defineType(field.getType()).getCreator().apply(cell);
             if (value == null) {
                 if (header.isRequired()) {
-                    handleWarning(new MissRequiredFieldException("No required field " + header.getColumnName() + " in cell " + cell.getAddress().toString()));
+                    handleException(new MissRequiredFieldException("No required field " + header.getColumnName() + " in cell " + cell.getAddress().toString()));
                 } else {
                     value = header.getDefaultValue();
                 }
@@ -65,10 +65,11 @@ public class StandardParser<T, H extends Header> extends AbstractParser<T> {
             field.setAccessible(true);
             try {
                 field.set(instance, value);
-            } catch (IllegalAccessException ignored) {}
+            } catch (IllegalAccessException ignored) {
+            }
             field.setAccessible(isAccessible);
         } catch (NoSuchFieldException e) {
-            handleWarning(new FieldMappingException(instance.getClass().toString() + " has no field with name " + header.getColumnName()));
+            handleException(new FieldMappingException(instance.getClass().toString() + " has no field with name " + header.getColumnName()));
         }
     }
 }

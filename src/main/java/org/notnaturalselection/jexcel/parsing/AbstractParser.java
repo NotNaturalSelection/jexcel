@@ -128,21 +128,7 @@ public abstract class AbstractParser<T> {
         }
     }
 
-//    public static String getStringCellAddress(int rowNum, int columnNum) {
-//        StringBuilder result = new StringBuilder();
-//        do {
-//            if (columnNum > ALPHABET.length()) {
-//                result.append(ALPHABET.charAt((columnNum  / ALPHABET.length())-1));
-//            } else {
-//                result.append(ALPHABET.charAt(columnNum  % ALPHABET.length()));
-//            }
-//            columnNum /= ALPHABET.length();
-//        } while (columnNum >0);
-//        result.append(rowNum+1);
-//        return result.toString();//fixme
-//    }
-
-    protected void handleWarning(AbstractParseException e)
+    protected void handleException(AbstractParseException e)
             throws AbstractParseException {
         switch (warningPolicy) {
             case STRONG:
