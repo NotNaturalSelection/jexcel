@@ -1,25 +1,48 @@
-import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.poi.ss.usermodel.Row;
 import org.notnaturalselection.jexcel.exceptions.AbstractParseException;
-import org.notnaturalselection.jexcel.parsing.StandardParser;
-import org.notnaturalselection.jexcel.parsing.WarningPolicy;
+import org.notnaturalselection.jexcel.parsing.annotated.AnnotatedParser;
+import org.notnaturalselection.jexcel.parsing.commons.AbstractParser;
+import org.notnaturalselection.jexcel.parsing.commons.WarningPolicy;
 import org.notnaturalselection.jexcel.parsing.dto.ParseResult;
+import org.notnaturalselection.jexcel.parsing.standard.StandardParser;
 
 public class Test {
     public static void main(String[] args)
             throws IOException, AbstractParseException {
-        StandardParser<ExampleObject, ExampleHeader> parser = new StandardParser<>(
-                ExampleObject::new,
-                Arrays.asList(ExampleHeader.values())
-        );
-        ParseResult<ExampleObject> result = parser.parse(new File("test.xlsx"));
-        Map<String, List<ExampleObject>> map = result.getResult();
-        List<String> warnings = result.getWarnings();
+
+
+        try (FileInputStream source = new FileInputStream("test.xlsx")) {
+            StandardParser<ExampleObject> parser = new StandardParser.Builder<>(Arrays.asList(ExampleHeader.values()), ExampleObject::new)
+                    .withHorizontalOffset(0)
+                    .withVerticalOffset(0)
+                    .build();
+            ParseResult<ExampleObject> result = parser.parse(source);
+            Map<String, List<ExampleObject>> map = result.getValues();
+            List<String> warnings = result.getWarnings();
+        }
+        try (FileInputStream source = new FileInputStream("test.xlsx")) {
+            AbstractParser<ExampleObject> parser = new AbstractParser<ExampleObject>(0, 0, WarningPolicy.STRONG) {
+                @Override
+                protected ExampleObject parseRow(Row row, List<String> warnings)
+                        throws AbstractParseException {
+                    return new ExampleObject();
+                }
+            };
+            ParseResult<ExampleObject> result = parser.parse(source);
+        }
+
+        try (FileInputStream source = new FileInputStream("test.xlsx")) {
+            AnnotatedParser<AnnotatedObject> parser = new AnnotatedParser.Builder<>(AnnotatedObject.class, AnnotatedObject::new)
+                    .withHorizontalOffset(0)
+                    .withVerticalOffset(0)
+                    .build();
+            ParseResult<AnnotatedObject> result = parser.parse(source);
+        }
     }
 }

@@ -1,6 +1,6 @@
-package org.notnaturalselection.jexcel.utils;
+package org.notnaturalselection.jexcel.parsing.annotated;
 
-import org.notnaturalselection.jexcel.parsing.Header;
+import org.notnaturalselection.jexcel.parsing.commons.Header;
 
 public class HeaderImpl implements Header {
 
@@ -27,22 +27,22 @@ public class HeaderImpl implements Header {
 
     @Override
     public int getColumnNumber() {
-        return 0;
+        return columnNumber;
     }
 
     @Override
     public String getColumnName() {
-        return null;
+        return columnName;
     }
 
     @Override
     public Object getDefaultValue() {
-        return null;
+        return defaultValue;
     }
 
     @Override
     public boolean isRequired() {
-        return false;
+        return isRequired;
     }
 
     public HeaderImpl() {

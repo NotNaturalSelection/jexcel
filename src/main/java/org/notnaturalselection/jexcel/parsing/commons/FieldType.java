@@ -1,4 +1,4 @@
-package org.notnaturalselection.jexcel.parsing;
+package org.notnaturalselection.jexcel.parsing.commons;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;

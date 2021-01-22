@@ -9,7 +9,7 @@ public class ParseResult<T> {
     private final Map<String, List<T>> result = new HashMap<>();
     private final List<String> warnings = new ArrayList<>();
 
-    public Map<String, List<T>> getResult() {
+    public Map<String, List<T>> getValues() {
         return result;
     }
 

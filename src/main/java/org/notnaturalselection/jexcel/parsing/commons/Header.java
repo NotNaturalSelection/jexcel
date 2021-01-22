@@ -1,4 +1,4 @@
-package org.notnaturalselection.jexcel.parsing;
+package org.notnaturalselection.jexcel.parsing.commons;
 
 public interface Header {
     int getColumnNumber();

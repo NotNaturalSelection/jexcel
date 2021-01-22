@@ -1,9 +1,9 @@
-import org.notnaturalselection.jexcel.parsing.Header;
+import org.notnaturalselection.jexcel.parsing.commons.Header;
 
 public enum ExampleHeader implements Header {
-    string(0, "string_column", null, false),
-    integer(1, "int_column", null, true),
-    date(2, "date_column", null, true);
+    string(0, "stringColumn", null, false),
+    integer(1, "intColumn", null, true),
+    date(2, "dateColumn", null, true);
 
     private final int columnNumber;
     private final String columnName;
