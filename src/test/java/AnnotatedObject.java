@@ -1,13 +1,13 @@
 import java.util.Date;
 
-import org.notnaturalselection.jexcel.parsing.annotated.ExcelColumn;
+import org.notnaturalselection.jexcel.parsing.annotated.ColumnInfo;
 
 public class AnnotatedObject {
-    @ExcelColumn(number = 0, name = "string")
+    @ColumnInfo(number = 0, name = "string")
     private String stringColumn;
-    @ExcelColumn(number = 1, name = "int")
+    @ColumnInfo(number = 1, name = "int")
     private Integer intColumn;
-    @ExcelColumn(number = 2, name = "date", isRequired = false)
+    @ColumnInfo(number = 2, name = "date", isRequired = false)
     private Date dateColumn;
 
     public String getStringColumn() {

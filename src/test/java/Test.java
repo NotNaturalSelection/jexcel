@@ -11,11 +11,11 @@ import org.notnaturalselection.jexcel.parsing.commons.AbstractParser;
 import org.notnaturalselection.jexcel.parsing.commons.WarningPolicy;
 import org.notnaturalselection.jexcel.parsing.dto.ParseResult;
 import org.notnaturalselection.jexcel.parsing.standard.StandardParser;
+import org.notnaturalselection.jexcel.parsing.utils.Parsers;
 
 public class Test {
     public static void main(String[] args)
             throws IOException, AbstractParseException {
-
 
         try (FileInputStream source = new FileInputStream("test.xlsx")) {
             StandardParser<ExampleObject> parser = new StandardParser.Builder<>(Arrays.asList(ExampleHeader.values()), ExampleObject::new)
@@ -42,6 +42,11 @@ public class Test {
                     .withHorizontalOffset(0)
                     .withVerticalOffset(0)
                     .build();
+            ParseResult<AnnotatedObject> result = parser.parse(source);
+        }
+
+        try (FileInputStream source = new FileInputStream("test.xlsx")) {
+            AnnotatedParser<AnnotatedObject> parser = Parsers.ofAnnotatedClass(AnnotatedObject.class, AnnotatedObject::new);
             ParseResult<AnnotatedObject> result = parser.parse(source);
         }
     }

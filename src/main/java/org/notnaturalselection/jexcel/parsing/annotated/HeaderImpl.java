@@ -54,4 +54,8 @@ public class HeaderImpl implements Header {
         this.defaultValue = defaultValue;
         this.isRequired = isRequired;
     }
+
+    public static HeaderImpl ofAnnotation(ColumnInfo info) {
+        return new HeaderImpl(info.number(), info.name(), null, info.isRequired());
+    }
 }

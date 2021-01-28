@@ -1,12 +1,19 @@
 package org.notnaturalselection.jexcel.parsing.utils;
 
+import java.util.Collection;
 import java.util.Date;
+import java.util.function.Supplier;
 
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellType;
+import org.notnaturalselection.jexcel.exceptions.AbstractParseException;
+import org.notnaturalselection.jexcel.exceptions.FieldMappingException;
 import org.notnaturalselection.jexcel.exceptions.IllegalFieldTypeException;
+import org.notnaturalselection.jexcel.parsing.annotated.AnnotatedParser;
+import org.notnaturalselection.jexcel.parsing.commons.Header;
+import org.notnaturalselection.jexcel.parsing.standard.StandardParser;
 
-public class ParsingUtils {
+public class Parsers {
     protected static Object parseCell(Cell cell) {
         switch (cell.getCellType()) {
             case NUMERIC:
@@ -54,5 +61,15 @@ public class ParsingUtils {
                     .getCellType()
                     .toString());
         }
+    }
+
+    public static <T> AnnotatedParser<T> ofAnnotatedClass(Class<T> annotatedClass, Supplier<T> supplier)
+            throws FieldMappingException {
+        return new AnnotatedParser.Builder<>(annotatedClass, supplier).build();
+    }
+
+    public static <T> StandardParser<T> ofHeaders(Collection<Header> headers, Supplier<T> supplier)
+            throws AbstractParseException {
+        return new StandardParser.Builder<T>(headers, supplier).build();
     }
 }

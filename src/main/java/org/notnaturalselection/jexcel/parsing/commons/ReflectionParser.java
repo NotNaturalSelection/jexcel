@@ -3,6 +3,7 @@ package org.notnaturalselection.jexcel.parsing.commons;
 import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.function.Supplier;
 
 import org.apache.poi.ss.usermodel.Cell;
@@ -17,15 +18,7 @@ public class ReflectionParser<T> extends AbstractParser<T> {
 
     private Supplier<T> supplier;
 
-    private Map<Header, Field> fieldMapping;
-
-    public Map<Header, Field> getFieldMapping() {
-        return fieldMapping;
-    }
-
-    public void setFieldMapping(Map<Header, Field> fieldMapping) {
-        this.fieldMapping = fieldMapping;
-    }
+    private final Map<Header, Field> fieldMapping;
 
     public Supplier<T> getSupplier() {
         return supplier;
@@ -74,21 +67,28 @@ public class ReflectionParser<T> extends AbstractParser<T> {
 
     public ParseResult<T> parseWorkbook(Workbook workbook)
             throws AbstractParseException {
-        if (getFieldMapping() == null || getFieldMapping().isEmpty()) {
+        if (fieldMapping == null || fieldMapping.isEmpty()) {
             throw new FieldMappingException("No field mapping is set");
         }
         return super.parseWorkbook(workbook);
     }
 
-    public ReflectionParser(int verticalOffset, int horizontalOffset, WarningPolicy warningPolicy, Supplier<T> supplier) {
+    public ReflectionParser(
+            int verticalOffset,
+            int horizontalOffset,
+            WarningPolicy warningPolicy,
+            Supplier<T> supplier,
+            Map<Header, Field> fieldMapping
+    ) {
         super(verticalOffset, horizontalOffset, warningPolicy);
         this.supplier = supplier;
+        this.fieldMapping = fieldMapping;
     }
 
     protected T parseRow(Row row, List<String> warnings)
             throws AbstractParseException {
         T instance = getSupplier().get();
-        for (Map.Entry<Header, Field> entry : getFieldMapping().entrySet()) {
+        for (Map.Entry<Header, Field> entry : fieldMapping.entrySet()) {
             Cell cell = row.getCell(entry.getKey().getColumnNumber() + getHorizontalOffset());
             parseCell(cell, entry.getKey(), entry.getValue(), instance, warnings);
         }
@@ -104,7 +104,7 @@ public class ReflectionParser<T> extends AbstractParser<T> {
     protected Object getValue(Cell cell, Header header, Field field, List<String> warnings)
             throws AbstractParseException {
         Object value = FieldType.defineType(field.getType()).getCreator().apply(cell);
-        if (value == null) {
+        if (Objects.isNull(value)) {
             if (header.isRequired()) {
                 handleException(new MissRequiredFieldException("No required field " + header.getColumnName() + " in cell " + cell
                         .getAddress()

@@ -34,21 +34,20 @@ public class AnnotatedParser<T> extends ReflectionParser<T> {
 
     public AnnotatedParser(int verticalOffset, int horizontalOffset, WarningPolicy warningPolicy, Supplier<T> supplier, Class<T> aClass)
             throws FieldMappingException {
-        super(verticalOffset, horizontalOffset, warningPolicy, supplier);
-        setFieldMapping(generateMapping(aClass));
+        super(verticalOffset, horizontalOffset, warningPolicy, supplier, generateMapping(aClass));
     }
 
     private static Map<Header, Field> generateMapping(Class<?> aClass)
             throws FieldMappingException {
         Map<Header, Field> fieldMapping = new HashMap<>();
         for (Field field : aClass.getDeclaredFields()) {
-            ExcelColumn columnInfo = field.getAnnotation(ExcelColumn.class);
+            ColumnInfo columnInfo = field.getAnnotation(ColumnInfo.class);
             if (columnInfo != null) {
-                fieldMapping.put(new HeaderImpl(columnInfo.number(), columnInfo.name(), null, columnInfo.isRequired()), field);
+                fieldMapping.put(HeaderImpl.ofAnnotation(columnInfo), field);
             }
         }
         if (fieldMapping.isEmpty()) {
-            throw new FieldMappingException(aClass.toString() + " has no fields annotated with " + ExcelColumn.class.toString());
+            throw new FieldMappingException(aClass + " has no fields annotated with " + ColumnInfo.class);
         }
         return fieldMapping;
     }
